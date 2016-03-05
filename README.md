@@ -3,6 +3,8 @@
 Get files from opentopography.org or elsewhere and convert them to RAW files for Unity to use for terrain heightmaps
 
 usage:
+
+You'll need node and npm and git
 ```
 >git clone github.com/fenwick67/unityterrainfromtiff.git
 >cd unityterrainfromtiff
