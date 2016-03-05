@@ -15,7 +15,6 @@ if (!filename){
 var decoder = new tiff.TIFFDecoder( fs.readFileSync( path.join(process.cwd(),filename) ) );
 
 var tiffObject = decoder.decode();
-//console.log('lotsa data');
 
 console.log('read '+ tiffObject.ifd[0].bitsPerSample + ' bit input image. Normalizing...' );
 
@@ -31,19 +30,22 @@ if(width <= maxSize && height <= maxSize){
   outputHeight = height;
   cropped = data;
 }else{
-  cropped = new Array(maxSize*maxSize); 
-  outputWidth = outputHeight = maxSize;
+  
+  outputWidth = Math.min(maxSize,width);
+  outputHeight = Math.min(maxSize,height);
+  cropped = new Array(outputHeight*outputWidth);
+  
   var outputIndex = 0;
-    
+  
   data.forEach(function(value,index){
-    if (index % width >= maxSize || outputIndex > maxSize*maxSize){
+    if (index % width >= outputWidth || outputIndex >= outputWidth*outputHeight ){
       //noop
     }else{
       cropped[outputIndex] = value;
       ++outputIndex;
     }
   });
-}//TODO handle case where it's wider but not shorter, or shorter and not wider
+}
 
 var normalized = normalizeToUint16(cropped);
 
@@ -62,20 +64,25 @@ fs.writeFile(outputFile,buf,function(er,data){
 
 function normalizeToUint16(data){
   var min = Infinity;
-  var max = 0;
+  var max = -Infinity;
   data.forEach(function(val){
-    if (val < min) min = val;
+    if (val < min && val > 0) min = val;
     if (val > max) max = val;
   });
-  //console.log(min);
-  //console.log(max);
+  console.log('converting from values ',min,'through',max);
 
   //got min and max, normalize into 0->65535 range
   var results = new Uint16Array(data.length);
-
+  
+  var newMin = Infinity;
+  var newMax = 0;
   data.forEach(function(val,idx){
-    results[idx] =  ((val - min)/(max-min)) * 65535;
+    results[idx] =  ((val - min)/(max-min)) * 65535;    
+    newMin = Math.min(newMin,results[idx]);
+    newMax = Math.max(newMax,results[idx]);
   });
+  
+  console.log('converted to values ',newMin,'through',newMax);
   
   return results;
 }
