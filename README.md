@@ -2,6 +2,8 @@
 
 Get files from opentopography.org or elsewhere and convert them to RAW files for Unity to use for terrain heightmaps
 
+Crops the image to 4097x4097 if it's bigger than that.
+
 usage:
 
 You'll need node and npm and git
