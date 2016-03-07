@@ -18,4 +18,4 @@ Might register in NPM if anybody wants it.
 
 ##Issues
 
-It might not work if your image is over 4097 in one dimension, but less than 4097 in the other... haven't tested.
+If your file is under 4097x4097 and isn't exactly (2^n)+1 px wide and high, unity will produce artifacts at the edges of your terrain.  This is because Unity internally uses heightmaps that are (2^n)+1 square.
