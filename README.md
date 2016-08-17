@@ -2,11 +2,9 @@
 
 Get files from opentopography.org or elsewhere and convert them to RAW files for Unity to use for terrain heightmaps
 
-Crops the image to 4097x4097 (from the top left) if it's bigger than that.
-
 ![image of terrain](https://i.imgur.com/mr1fvKk.png)
 
-usage:
+## Usage:
 
 You'll need node and npm and git
 ```
@@ -18,6 +16,8 @@ You'll need node and npm and git
 
 Might register in NPM if anybody wants it.
 
-##Issues
+## Limitations
 
 If your file is under 4097x4097 and isn't exactly (2^n)+1 px wide and high, Unity will produce artifacts at the edges of your terrain.  This is because Unity internally uses heightmaps that are (2^n)+1 square.
+
+The image will get cropped to 4097x4097 (from the top left) if it's bigger than that.  This is the biggest that Unity supports.
